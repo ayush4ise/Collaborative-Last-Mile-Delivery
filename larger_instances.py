@@ -110,93 +110,80 @@ def EuclideanDistance(x1, y1, x2, y2):
     return distance
 
 # Algorthm 1 - Phase A
-# def algorithm1(satellites, customers, collaboration_points): 
-#     """
-#     An improved greedy algorithm for allocation and balancing
+def algorithm1(satellites, customers): 
+    """
+    An improved greedy algorithm for allocation and balancing
     
-#     Parameters
-#     ----------
-#     satellites : dict
-#         The dictionary containing the satellites
-#     customers : dict
-#         The dictionary containing the customers
-#     collaboration_points : dict
-#         The dictionary containing the collaboration points
+    Parameters
+    ----------
+    satellites : dict
+        The dictionary containing the satellites
+    customers : dict
+        The dictionary containing the customers
 
-#     Returns
-#     -------
-#     customers : dict
-#         The dictionary containing the customers with the updated origin satellite                                 
-#     """
+    Returns
+    -------
+    customers : dict
+        The dictionary containing the customers with the updated origin satellite                                 
+    """
+    # set N <- total no. of lsps (2)
+    N = 2
 
-#     # Segregate the data as per different lsps
-#     # lsp1_satellites = {key: value for key, value in satellites.items() if value['lsp'] == 1}
-#     # lsp2_satellites = {key: value for key, value in satellites.items() if value['lsp'] == 2}
-#     # lsp1_customers = {key: value for key, value in customers.items() if value['lsp'] == 1}
-#     # lsp2_customers = {key: value for key, value in customers.items() if value['lsp'] == 2}
+    # loop for each lsp
+    for i in range(N):
+        lsp_customers = {key: value for key, value in customers.items() if value['lsp'] == i+1}
+        lsp_satellites = {key: value for key, value in satellites.items() if value['lsp'] == i+1}
 
-#     ############################################################################################################
-#     # lspi_satellite = {Sat1: {'x':, 'y':, 'lsp':}, Sat2: {'x':, 'y':, 'lsp':}}
-#     # lspi_customers = {Cust1: {'demand':, 'x':, 'y':, 'lsp':}, Cust2: {'demand':, 'x':, 'y':, 'lsp':}}
-#     ############################################################################################################
+        ############################################################################################################
+        # lspi_satellite = {Sat1: {'x':, 'y':, 'lsp':}, Sat2: {'x':, 'y':, 'lsp':}}
+        # lspi_customers = {Cust1: {'demand':, 'x':, 'y':, 'lsp':}, Cust2: {'demand':, 'x':, 'y':, 'lsp':}}
+        ############################################################################################################
 
-#     # set N <- total no. of lsps (2)
-#     N = 2
+        # for all customers of lsp i, assign them to the nearest satellite considering the Euclidean distance
+        for customer in lsp_customers:
+            min_dist = float('inf')
+            for satellite in lsp_satellites:
+                dist = EuclideanDistance(lsp_customers[customer]['x'], lsp_customers[customer]['y'], lsp_satellites[satellite]['x'], lsp_satellites[satellite]['y'])
+                if dist < min_dist:
+                    min_dist = dist
+                    lsp_customers[customer]['origin_satellite'] = satellite
+            lsp_satellites[lsp_customers[customer]['origin_satellite']]['origin_customers'] = lsp_satellites[lsp_customers[customer]['origin_satellite']].get('origin_customers', []) + [customer]
 
-#     # loop for each lsp
-#     for i in range(N):
-#         lsp_customers = {key: value for key, value in customers.items() if value['lsp'] == i+1}
-#         lsp_satellites = {key: value for key, value in satellites.items() if value['lsp'] == i+1}
-#         # for all customers of lsp i, assign them to the nearest satellite considering the Euclidean distance
-#         for customer in lsp_customers:
-#             min_dist = float('inf')
-#             for satellite in lsp_satellites:
-#                 dist = EuclideanDistance(lsp_customers[customer]['x'], lsp_customers[customer]['y'], lsp_satellites[satellite]['x'], lsp_satellites[satellite]['y'])
-#                 if dist < min_dist:
-#                     min_dist = dist
-#                     lsp_customers[customer]['origin_satellite'] = satellite
-#             lsp_satellites[lsp_customers[customer]['origin_satellite']]['origin_customers'] = lsp_satellites[lsp_customers[customer]['origin_satellite']].get('origin_customers', []) + [customer]
+        ############################################################################################################
+        # lspi_customers = {Cust1: {'demand':, 'x':, 'y':, 'lsp':, 'origin_satellite':}, Cust2: {'demand':, 'x':, 'y':, 'lsp':, 'origin_satellite':}}
+        # lspi_satellite = {Sat1: {'x':, 'y':, 'lsp':, 'origin_customers':}, Sat2: {'x':, 'y':, 'lsp':, 'origin_customers':}}
+        ############################################################################################################
 
-#         ############################################################################################################
-#         # lspi_customers = {Cust1: {'demand':, 'x':, 'y':, 'lsp':, 'origin_satellite':}, Cust2: {'demand':, 'x':, 'y':, 'lsp':, 'origin_satellite':}}
-#         # lspi_satellite = {Sat1: {'x':, 'y':, 'lsp':, 'origin_customers':}, Sat2: {'x':, 'y':, 'lsp':, 'origin_customers':}}
-#         ############################################################################################################
+        # if demand assigned to a satellite exceeds its capacity, reallocation of customers to the satellite where capacity is available
+        # satellite capacity, As <- 60 (which is 6 customers)
+        As = 60
 
-#         # if demand assigned to a satellite exceeds its capacity, reallocation of customers to the satellite where capacity is available
-#         # satellite capacity, As <- 60 (which is 6 customers)
-#         As = 60
-#         for satellite in lsp_satellites:
-#             if sum([lsp_customers[customer]['demand'] for customer in lsp_satellites[satellite].get('origin_customers', [])]) > As:
-#                 # for all customers of lsp i
-#                 # for all satellites of lsp i
-#                 # calculate the distance between the customer and the satellite
-#                 for customer in lsp_customers:
-#                     for satellite in lsp_satellites:
-#                         dist = EuclideanDistance(lsp_customers[customer]['x'], lsp_customers[customer]['y'], lsp_satellites[satellite]['x'], lsp_satellites[satellite]['y'])
-#                         lsp_customers[customer][satellite] = dist
+        for satellite in lsp_satellites:
+            if sum([lsp_customers[customer]['demand'] for customer in lsp_satellites[satellite].get('origin_customers', [])]) > As:
+                # filter customers allocated to satellite
+                customers_sat = {key: value for key, value in lsp_customers.items() if key in lsp_satellites[satellite].get('origin_customers', [])}
+                # sort customers by distance to satellite
+                for customer in customers_sat:
+                    customers_sat[customer]['distance'] = EuclideanDistance(customers_sat[customer]['x'], customers_sat[customer]['y'], lsp_satellites[satellite]['x'], lsp_satellites[satellite]['y'])
+                customers_sat = dict(sorted(customers_sat.items(), key=lambda item: item[1]['distance'], reverse=True))
+                # get the other satellite for the same LSP
+                other_satellite = [key for key in lsp_satellites if key != satellite][0]
 
-#                     # set D <- dist(Sat1, customer) - dist(Sat2, customer)
-#                     # sorting satellites based on D calculated above
-#                     D = lsp_customers[customer][list(lsp_satellites.keys())[0]] - lsp_customers[customer][list(lsp_satellites.keys())[1]]
-#                     sorted_satellites = sorted(lsp_satellites, key=lambda x: D)
+                extra = sum([lsp_customers[customer]['demand'] for customer in lsp_satellites[satellite].get('origin_customers', [])]) - As
 
+                while extra > 0:
+                    # relocate the farthest customer to the other satellite
+                    customer = list(customers_sat.keys())[0]
+                    lsp_satellites[other_satellite]['origin_customers'] = lsp_satellites[other_satellite].get('origin_customers', []) + [customer]
+                    lsp_satellites[satellite]['origin_customers'].remove(customer)
+                    lsp_customers[customer]['origin_satellite'] = other_satellite
+                    # update capacity
+                    extra -= lsp_customers[customer]['demand']
+                    customers_sat.pop(customer, None)
 
-#                 # Reallocation of customers in the above sequence to the satellite where capacity is available
-#                 for satellite in sorted_satellites:
-#                     if sum([lsp_customers[customer]['demand'] for customer in lsp_satellites[satellite].get('origin_customers', [])]) + lsp_customers[customer]['demand'] <= As:
-#                         lsp_satellites[satellite]['origin_customers'] = lsp_satellites[satellite].get('origin_customers', []) + [customer]
-#                         break
-        
-#         # drop satellite distances from customers dict
-#         for satellite in lsp_satellites:
-#             for customer in lsp_customers:
-#                 lsp_customers[customer].pop(satellite, None)
+        customers.update(lsp_customers)
+        satellites.update(lsp_satellites)
 
-#         customers.update(lsp_customers)
-#         satellites.update(lsp_satellites)
+    return customers, satellites
 
-#     # Update the customers dictionary with the origin satellite
-#     # customers.update(lsp1_customers)
-#     # customers.update(lsp2_customers)
-
-#     return customers
+# Algorthm 2 - Phase B
