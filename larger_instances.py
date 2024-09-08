@@ -164,11 +164,20 @@ def algorithm1(satellites, customers):
             if sum([lsp_customers[customer]['demand'] for customer in lsp_satellites[satellite].get('origin_customers', [])]) > As:
                 # filter customers allocated to satellite
                 customers_sat = {key: value for key, value in lsp_customers.items() if key in lsp_satellites[satellite].get('origin_customers', [])}
+                
+                # # sort customers by difference of distance to satellite
+                # other_satellite = [key for key in lsp_satellites if key != satellite][0]
+                # for customer in customers_sat:
+                #     customers_sat[customer]['D'] = EuclideanDistance(customers_sat[customer]['x'], customers_sat[customer]['y'], lsp_satellites[satellite]['x'], lsp_satellites[satellite]['y']) - EuclideanDistance(customers_sat[customer]['x'], customers_sat[customer]['y'], lsp_satellites[other_satellite]['x'], lsp_satellites[other_satellite]['y'])
+                # customers_sat = dict(sorted(customers_sat.items(), key=lambda item: item[1]['D'], reverse=True))
+
                 # sort customers by difference of distance to satellite
-                other_satellite = [key for key in lsp_satellites if key != satellite][0]
                 for customer in customers_sat:
-                    customers_sat[customer]['D'] = EuclideanDistance(customers_sat[customer]['x'], customers_sat[customer]['y'], lsp_satellites[satellite]['x'], lsp_satellites[satellite]['y']) - EuclideanDistance(customers_sat[customer]['x'], customers_sat[customer]['y'], lsp_satellites[other_satellite]['x'], lsp_satellites[other_satellite]['y'])
+                    sats = list(lsp_satellites.keys())
+                    customers_sat[customer]['D'] = EuclideanDistance(customers_sat[customer]['x'], customers_sat[customer]['y'], lsp_satellites[sats[0]]['x'], lsp_satellites[sats[0]]['y']) - EuclideanDistance(customers_sat[customer]['x'], customers_sat[customer]['y'], lsp_satellites[sats[1]]['x'], lsp_satellites[sats[1]]['y'])
                 customers_sat = dict(sorted(customers_sat.items(), key=lambda item: item[1]['D'], reverse=True))
+
+
                 # get the other satellite for the same LSP
                 other_satellite = [key for key in lsp_satellites if key != satellite][0]
 
@@ -250,3 +259,5 @@ def algorithm2(satellites, customers, collaboration_points):
         satellites[satellite_pair[1]]['collaboration_point'] = collaboration_point_o1
 
     return customers, satellites
+
+# Algorthm 3 - Phase C
