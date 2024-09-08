@@ -124,7 +124,9 @@ def algorithm1(satellites, customers):
     Returns
     -------
     customers : dict
-        The dictionary containing the customers with the updated origin satellite                                 
+        The dictionary containing the customers with the updated origin satellite  
+    satellites : dict
+        The dictionary containing the satellites with the updated origin customers                               
     """
     # set N <- total no. of lsps (2)
     N = 2
@@ -162,10 +164,11 @@ def algorithm1(satellites, customers):
             if sum([lsp_customers[customer]['demand'] for customer in lsp_satellites[satellite].get('origin_customers', [])]) > As:
                 # filter customers allocated to satellite
                 customers_sat = {key: value for key, value in lsp_customers.items() if key in lsp_satellites[satellite].get('origin_customers', [])}
-                # sort customers by distance to satellite
+                # sort customers by difference of distance to satellite
+                other_satellite = [key for key in lsp_satellites if key != satellite][0]
                 for customer in customers_sat:
-                    customers_sat[customer]['distance'] = EuclideanDistance(customers_sat[customer]['x'], customers_sat[customer]['y'], lsp_satellites[satellite]['x'], lsp_satellites[satellite]['y'])
-                customers_sat = dict(sorted(customers_sat.items(), key=lambda item: item[1]['distance'], reverse=True))
+                    customers_sat[customer]['D'] = EuclideanDistance(customers_sat[customer]['x'], customers_sat[customer]['y'], lsp_satellites[satellite]['x'], lsp_satellites[satellite]['y']) - EuclideanDistance(customers_sat[customer]['x'], customers_sat[customer]['y'], lsp_satellites[other_satellite]['x'], lsp_satellites[other_satellite]['y'])
+                customers_sat = dict(sorted(customers_sat.items(), key=lambda item: item[1]['D'], reverse=True))
                 # get the other satellite for the same LSP
                 other_satellite = [key for key in lsp_satellites if key != satellite][0]
 
@@ -183,7 +186,67 @@ def algorithm1(satellites, customers):
 
         customers.update(lsp_customers)
         satellites.update(lsp_satellites)
+        # drop the 'distance' key from customers
+        for customer in customers:
+            customers[customer].pop('D', None)
 
     return customers, satellites
 
 # Algorthm 2 - Phase B
+def algorithm2(satellites, customers, collaboration_points):
+    """
+     Assignment of a clustered satellite and a collaboration point to each customer
+
+    Parameters
+    ----------
+    satellites : dict
+        The dictionary containing the satellites
+    customers : dict
+        The dictionary containing the customers
+    collaboration_points : dict
+        The dictionary containing the collaboration points
+
+    Returns
+    -------
+    customers : dict
+        The dictionary containing the customers with the updated clustered satellite
+    satellites : dict
+        The dictionary containing the satellites with the updated collaboration points
+    """
+    # form a pair of satellites S1 and S2 such that they are closest to each other but belong to different logistics service providers
+    satellite_pairs = {}
+    for satellite1 in satellites:
+        for satellite2 in satellites:
+            if satellite1 != satellite2 and satellites[satellite1]['lsp'] != satellites[satellite2]['lsp']:
+                satellite_pairs[(satellite1, satellite2)] = EuclideanDistance(satellites[satellite1]['x'], satellites[satellite1]['y'], satellites[satellite2]['x'], satellites[satellite2]['y'])
+
+    satellite_pairs = dict(sorted(satellite_pairs.items(), key=lambda item: item[1]))
+    satellite_pair = list(satellite_pairs.keys())[0]
+    # other satellite pair = satellite pair where no satellite is in the satellite pair
+    other_satellite_pair = [other_sat_pair for other_sat_pair in satellite_pairs.keys() if other_sat_pair[0] not in satellite_pair and other_sat_pair[1] not in satellite_pair][0]
+    satellite_pairs = [satellite_pair, other_satellite_pair]
+
+    # assign collaboration point O1 closest to the pair of satellites S1 and S2
+    for satellite_pair in satellite_pairs:
+        satellite1 = satellites[satellite_pair[0]]
+        satellite2 = satellites[satellite_pair[1]]
+        for collaboration_point in collaboration_points:
+            collaboration_points[collaboration_point]['distance'] = EuclideanDistance(collaboration_points[collaboration_point]['x'], collaboration_points[collaboration_point]['y'], satellite1['x'], satellite1['y']) + EuclideanDistance(collaboration_points[collaboration_point]['x'], collaboration_points[collaboration_point]['y'], satellite2['x'], satellite2['y'])
+        collaboration_point_o1 = min(collaboration_points, key=lambda x: collaboration_points[x]['distance'])
+
+        # for all customers whose origin satellites are S1 and S2
+        # assign clustered sat S1 or S2 to the customer based on euclidean distance
+        # assign O1 as collaboration point to the customer
+        for customer in customers:
+            if customers[customer]['origin_satellite'] in satellite_pair:
+                if EuclideanDistance(customers[customer]['x'], customers[customer]['y'], satellite1['x'], satellite1['y']) < EuclideanDistance(customers[customer]['x'], customers[customer]['y'], satellite2['x'], satellite2['y']):
+                    customers[customer]['clustered_satellite'] = satellite_pair[0]
+                else:
+                    customers[customer]['clustered_satellite'] = satellite_pair[1]
+                customers[customer]['collaboration_point'] = collaboration_point_o1
+    
+        # update the collaboration points
+        satellites[satellite_pair[0]]['collaboration_point'] = collaboration_point_o1
+        satellites[satellite_pair[1]]['collaboration_point'] = collaboration_point_o1
+
+    return customers, satellites
