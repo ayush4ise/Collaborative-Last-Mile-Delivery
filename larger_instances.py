@@ -221,6 +221,8 @@ def algorithm2(satellites, customers, collaboration_points):
         The dictionary containing the customers with the updated clustered satellite
     satellites : dict
         The dictionary containing the satellites with the updated collaboration points
+    satellite_pairs : list
+        The list containing the pairs of satellites
     """
     # form a pair of satellites S1 and S2 such that they are closest to each other but belong to different logistics service providers
     satellite_pairs = {}
@@ -258,6 +260,56 @@ def algorithm2(satellites, customers, collaboration_points):
         satellites[satellite_pair[0]]['collaboration_point'] = collaboration_point_o1
         satellites[satellite_pair[1]]['collaboration_point'] = collaboration_point_o1
 
-    return customers, satellites
+    return customers, satellites, satellite_pairs
 
 # Algorthm 3 - Phase C
+def algorithm3(satellites, customers, vehicles, satellite_pairs, N):
+    """
+    Allocation of the customer to different vehicles and routing for each vehicle
+
+    Parameters
+    ----------
+    satellites : dict
+        The dictionary containing the satellites
+    customers : dict
+        The dictionary containing the customers
+    vehicles : dict
+        The dictionary containing the vehicles
+    satellite_pairs : list
+        The list containing the pairs of satellites
+    N : int
+        The number of iterations
+
+    Returns
+    -------
+    customers : dict
+        The dictionary containing the customers with the updated vehicle assignment
+    vehicles : dict
+        The dictionary containing the vehicles with the updated routes
+    """
+    # set number of iterations
+    N = N
+
+    # vehicles = {(3, 1): {'capacity': 30, 'satellite': 3, 'lsp': 1.0},
+                # (3, 2): {'capacity': 30, 'satellite': 3, 'lsp': 1.0},
+                # (4, 1): {'capacity': 30, 'satellite': 4, 'lsp': 2.0},
+                # (4, 2): {'capacity': 30, 'satellite': 4, 'lsp': 2.0},
+                # (5, 1): {'capacity': 30, 'satellite': 5, 'lsp': 1.0},
+                # (5, 2): {'capacity': 30, 'satellite': 5, 'lsp': 1.0},
+                # (6, 1): {'capacity': 30, 'satellite': 6, 'lsp': 2.0},
+                # (6, 2): {'capacity': 30, 'satellite': 6, 'lsp': 2.0}}
+
+    for _ in range(N):
+        for satellite_pair in satellite_pairs:
+            satellite1 = satellite_pair[0]
+            satellite2 = satellite_pair[1]
+            
+            vehicle_pairs = [[(satellite1, 1), (satellite2, 1)], [(satellite1, 2), (satellite2, 2)]]
+            # for vehicle_pair in vehicle_pairs:
+                # while capacity of vehicles (V1,V2) <= 30^2, assign customers to the vehicles
+
+
+                # v1 + v2 <= 30^2, doesn't have to be v1 <= 30 and v2 <= 30
+
+
+    pass
