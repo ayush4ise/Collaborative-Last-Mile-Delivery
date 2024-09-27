@@ -36,7 +36,14 @@ DUS = D + S # list of depots and satellites
 SUCUO = S + C + O # list of satellites, customers, and collaboration points
 CUO = C + O # list of customers, and collaboration points
 
+DUS_1 = [1, 3, 5] # list of depots and satellites for lsp 1
+DUS_2 = [2, 4, 6] # list of depots and satellites for lsp 2
 
+C1 = [8, 10, 12, 14, 16, 18] # list of customers for lsp 1
+C2 = [7, 9, 11, 13, 15, 17] # list of customers for lsp 2
+
+S1 = [3, 5] # list of satellites for lsp 1
+S2 = [4, 6] # list of satellites for lsp 2
 
 # Parameters
 # Given in Table 4
@@ -50,6 +57,11 @@ A_s = {3:30, 4:30, 5:30, 6:30} # capacity of satellite s
 K1 = 60 # capacity of first echelon vehicles
 K2 = 30 # capacity of second echelon vehicles
 p_c = {7:2, 8:1, 9:2, 10:1, 11:2, 12:1, 13:2, 14:1, 15:2, 16:1, 17:2, 18:1} # DC to which customer c belongs to
+
+
+
+# Assumption
+M = 10000  # A sufficiently large constant
 
 
 
@@ -106,3 +118,44 @@ m.setObjective(
 
 
 # Constraints
+# Constraints in first echelon
+
+for j in DUS:
+    for t in T:
+        m.addConstr(gp.quicksum(R_ij_t[l, j, t] for l in DUS) + gp.quicksum(R_ij_t[j, l, t] for l in DUS) == 0, name=f"FirstEchelon1_j_{j}_t_{t}")
+
+
+for t in T:
+    m.addConstr(gp.quicksum((gp.quicksum(R_ij_t[i, j, t] for j in D) for i in S) <= U_t[t] , name=f"FirstEchelon2_t_{t}"))
+
+
+for c in C:
+    for t in T:
+        m.addConstr(gp.quicksum(R_ij_t[p_c[c], s, t] for s in S) >= Y_c_t, name = f"FirstEchelon3_c_{c}_t_{t}")
+
+
+for t in T:
+    m.addConstr(gp.quicksum((d_c[c] * Y_c_t[c][t]) for c in C) <= K1 * U_t[t], name=f"FirstEchelon4_t_{t}")
+
+
+for c in C:
+    m.addConstr(gp.quicksum(Y_c_t[c][t] for t in T) == 1, name=f"FirstEchelon5_c_{c}")
+
+
+for c in C:
+    for s in S:
+        for t in T:
+            m.addConstr(M * (2 - Y_c_t[c][t] - Q_c_s[c][s]) + gp.quicksum(R_ij_t[s, k, t] for k in DUS) >= 1, name=f"FirstEchelon6_c_{c}_s_{s}_t_{t}")
+
+
+for i in DUS_1:
+    for j in DUS_2:
+        for t in T:
+            m.addConstr(R_ij_t[i, j, t] == 0, name=f"FirstEchelon7_i_{i}_j_{j}_t_{t}")
+
+
+for c in C1:
+    m.addConstr(gp.quicksum(Q_c_s[c][s] for s in S1) == 1, name=f"FirstEchelon8_c_{c}")
+
+for c in C2:
+    m.addConstr(gp.quicksum(Q_c_s[c][s] for s in S2) == 1, name=f"FirstEchelon9_c_{c}")
