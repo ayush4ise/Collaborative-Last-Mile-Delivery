@@ -30,7 +30,7 @@ C = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18] # list of customers
 O = [19, 20] # list of collaboration points
 
 T = [1,2] # list of first echelon vehicles
-V = [3, 4] # list of second echelon vehicles
+V = [3, 4, 5, 6] # list of second echelon vehicles
 
 
 DUS = D + S # list of depots and satellites
@@ -54,9 +54,9 @@ S2 = [4, 6] # list of satellites for lsp 2
 C_ij = np.array(distances) # cost to travel from i to j
 
 F_t = {1:100, 2:100} # fixed cost of first echelon vehicles
-F_v = {3:50, 4:50} # fixed cost of second echelon vehicles
+F_v = {3:50, 4:50, 5:50, 6:50} # fixed cost of second echelon vehicles
 
-d_c = {7:30, 8:30, 9:30, 10:30, 11:30, 12:30, 13:30, 14:30, 15:30, 16:30, 17:30, 18:30} # demand of customer c
+d_c = {7:10, 8:10, 9:10, 10:10, 11:10, 12:10, 13:10, 14:10, 15:10, 16:10, 17:10, 18:10} # demand of customer c
 A_s = {3:30, 4:30, 5:30, 6:30} # capacity of satellite s
 K1 = 60 # capacity of first echelon vehicles
 K2 = 30 # capacity of second echelon vehicles
