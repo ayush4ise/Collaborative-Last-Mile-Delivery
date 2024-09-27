@@ -112,8 +112,8 @@ G_i_v = m.addVars(CUO, V, vtype=gp.GRB.INTEGER, name="G_i_v")
 
 # Objective Function
 m.setObjective(
-    gp.quicksum(C_ij[i, j] * R_ij_t[i, j, t] for i in DUS for j in DUS for t in T) +
-    gp.quicksum(C_ij[i, j] * X_ij_v[i, j, v] for i in SUCUO for j in SUCUO for v in V) +
+    gp.quicksum(C_ij[i-1, j-1] * R_ij_t[i, j, t] for i in DUS for j in DUS for t in T) +
+    gp.quicksum(C_ij[i-1, j-1] * X_ij_v[i, j, v] for i in SUCUO for j in SUCUO for v in V) +
     gp.quicksum(F_t[t] * U_t[t] for t in T) + 
     gp.quicksum(F_v[v] * U_v[v] for v in V),
     sense=gp.GRB.MINIMIZE
@@ -130,26 +130,26 @@ for j in DUS:
 
 
 for t in T:
-    m.addConstr(gp.quicksum((gp.quicksum(R_ij_t[i, j, t] for j in D) for i in S) <= U_t[t] , name=f"FirstEchelon2_t_{t}"))
+    m.addConstr(gp.quicksum((gp.quicksum(R_ij_t[i, j, t] for j in D)) for i in S) <= U_t[t], name=f"FirstEchelon2_t_{t}")
 
 
 for c in C:
     for t in T:
-        m.addConstr(gp.quicksum(R_ij_t[p_c[c], s, t] for s in S) >= Y_c_t, name = f"FirstEchelon3_c_{c}_t_{t}")
+        m.addConstr(gp.quicksum(R_ij_t[p_c[c], s, t] for s in S) >= Y_c_t[c, t], name = f"FirstEchelon3_c_{c}_t_{t}")
 
 
 for t in T:
-    m.addConstr(gp.quicksum((d_c[c] * Y_c_t[c][t]) for c in C) <= K1 * U_t[t], name=f"FirstEchelon4_t_{t}")
+    m.addConstr(gp.quicksum((d_c[c] * Y_c_t[c, t]) for c in C) <= K1 * U_t[t], name=f"FirstEchelon4_t_{t}")
 
 
 for c in C:
-    m.addConstr(gp.quicksum(Y_c_t[c][t] for t in T) == 1, name=f"FirstEchelon5_c_{c}")
+    m.addConstr(gp.quicksum(Y_c_t[c, t] for t in T) == 1, name=f"FirstEchelon5_c_{c}")
 
 
 for c in C:
     for s in S:
         for t in T:
-            m.addConstr(M * (2 - Y_c_t[c][t] - Q_c_s[c][s]) + gp.quicksum(R_ij_t[s, k, t] for k in DUS) >= 1, name=f"FirstEchelon6_c_{c}_s_{s}_t_{t}")
+            m.addConstr(M * (2 - Y_c_t[c, t] - Q_c_s[c, s]) + gp.quicksum(R_ij_t[s, k, t] for k in DUS) >= 1, name=f"FirstEchelon6_c_{c}_s_{s}_t_{t}")
 
 
 for i in DUS_1:
@@ -159,10 +159,10 @@ for i in DUS_1:
 
 
 for c in C1:
-    m.addConstr(gp.quicksum(Q_c_s[c][s] for s in S1) == 1, name=f"FirstEchelon8_c_{c}")
+    m.addConstr(gp.quicksum(Q_c_s[c, s] for s in S1) == 1, name=f"FirstEchelon8_c_{c}")
 
 for c in C2:
-    m.addConstr(gp.quicksum(Q_c_s[c][s] for s in S2) == 1, name=f"FirstEchelon8_c_{c}")
+    m.addConstr(gp.quicksum(Q_c_s[c, s] for s in S2) == 1, name=f"FirstEchelon8_c_{c}")
 
 
 # Constraints in second echelon
@@ -182,7 +182,7 @@ for c in C:
 
 for c in C:
     for v in V:
-        m.addConstr(gp.quicksum(X_ij_v[c, k, v] for k in SUCUO) == Y_c_v[c][v], name=f"SecondEchelon4_c_{c}_v_{v}")
+        m.addConstr(gp.quicksum(X_ij_v[c, k, v] for k in SUCUO) == Y_c_v[c, v], name=f"SecondEchelon4_c_{c}_v_{v}")
 
 
 for v in V:
@@ -191,7 +191,7 @@ for v in V:
 
 for s in S:
     for v in V:
-        m.addConstr(gp.quicksum(X_ij_v[s, j, v] for j in CUO) == B_v_s[v][s], name=f"SecondEchelon6_s_{s}_v_{v}")
+        m.addConstr(gp.quicksum(X_ij_v[s, j, v] for j in CUO) == B_v_s[v, s], name=f"SecondEchelon6_s_{s}_v_{v}")
 
 
 for v in V:
@@ -207,7 +207,7 @@ for v in V:
 for v in V:
     for s in S:
         for c in C:
-            m.addConstr(M * (3 - Q_c_s[c][s] - Y_c_v[c][v] - B_v_s[v][s]) + gp.quicksum(X_ij_v[i, c, v] for i in SUC) >= 1, name=f"SecondEchelon9_v_{v}_s_{s}_c_{c}")
+            m.addConstr(M * (3 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, s]) + gp.quicksum(X_ij_v[i, c, v] for i in SUC) >= 1, name=f"SecondEchelon9_v_{v}_s_{s}_c_{c}")
 
 
 for v in V:
@@ -215,7 +215,7 @@ for v in V:
         for s in S:
             for e in S:
                 if s!=e:
-                    m.addConstr(M * (3 - Q_c_s[c][s] - Y_c_v[c][v] - B_v_s[v][e]) + gp.quicksum(K_sv_o[e, v, o] for o in O) >= 1, name=f"SecondEchelon10_v_{v}_c_{c}_s_{s}_e_{e}")
+                    m.addConstr(M * (3 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e]) + gp.quicksum(K_sv_o[e, v, o] for o in O) >= 1, name=f"SecondEchelon10_v_{v}_c_{c}_s_{s}_e_{e}")
 
 
 for v in V:
@@ -224,7 +224,7 @@ for v in V:
             for s in S:
                 for e in S:
                     if s!=e:
-                        m.addConstr(M * (4 - Q_c_s[c][s] - Y_c_v[c][v] - B_v_s[v][e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C1) + X_ij_v[o, c, v] >= 2, name=f"SecondEchelon11_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
+                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C1) + X_ij_v[o, c, v] >= 2, name=f"SecondEchelon11_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
 
 for v in V:
     for o in O:
@@ -232,7 +232,7 @@ for v in V:
             for s in S:
                 for e in S:
                     if s!=e:
-                        m.addConstr(M * (4 - Q_c_s[c][s] - Y_c_v[c][v] - B_v_s[v][e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C2) + X_ij_v[o, c, v] >= 2, name=f"SecondEchelon12_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
+                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C2) + X_ij_v[o, c, v] >= 2, name=f"SecondEchelon12_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
 
 
 for v in V:
@@ -245,7 +245,7 @@ for v in V:
 
 
 for s in S:
-    m.addConstr(gp.quicksum(Q_c_s[c, s] * d_c[c] for c in C) == gp.quicksum((gp.quicksum(H_ij_v[s, j, v]) for j in CUO) for v in V), name=f"SecondEchelon14_s_{s}")
+    m.addConstr(gp.quicksum(Q_c_s[c, s] * d_c[c] for c in C) == gp.quicksum((gp.quicksum(H_ij_v[s, j, v] for j in CUO)) for v in V), name=f"SecondEchelon14_s_{s}")
 
 
 for c in C:
@@ -287,7 +287,7 @@ for s in S:
 for i in S:
     for j in S:
         for t in T:
-            m.addConstr(G_i_t[i, t] - G_i_t[j, t] + ns * X_ij_v[i, j, t] <= ns - 1, name=f"SecondEchelon22_i_{i}_j_{j}_t_{t}" )
+            m.addConstr(G_i_t[i, t] - G_i_t[j, t] + ns * R_ij_t[i, j, t] <= ns - 1, name=f"SecondEchelon22_i_{i}_j_{j}_t_{t}" )
 
 
 for i in CUO:
