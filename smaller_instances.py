@@ -314,6 +314,14 @@ if m.status == GRB.OPTIMAL:
     print("Optimal solution found.")
     # for var in m.getVars():
     #     print(f"{var.varName}: {var.x}")
+
+    varInfo = {}
+    for v in m.getVars():
+        if v.x>0:
+            varInfo[v.varName] = v.x
+
+    pd.DataFrame(varInfo, index = ['value']).T.to_excel('solution.xlsx')
+
 else:
     print(f"Optimization ended with status {m.status}.")
 
