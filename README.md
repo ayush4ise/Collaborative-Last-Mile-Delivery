@@ -19,3 +19,9 @@ R_ij_t - R_ji_t = 0
 
 
 - Constraint 10 - same as constraint 2
+
+
+
+Question-
+
+- The value of M effects the optimal solutions. Why?
