@@ -65,7 +65,7 @@ p_c = {7:2, 8:1, 9:2, 10:1, 11:2, 12:1, 13:2, 14:1, 15:2, 16:1, 17:2, 18:1} # DC
 
 
 # Assumption
-M = 10000  # A sufficiently large constant
+M = 10000 # A sufficiently large constant
 
 
 
@@ -124,9 +124,12 @@ m.setObjective(
 # Constraints
 # Constraints in first echelon
 
+# for j in DUS:
+#     for t in T:
+#         m.addConstr(gp.quicksum(R_ij_t[l, j, t] for l in DUS) + gp.quicksum(R_ij_t[j, l, t] for l in DUS) == 0, name=f"FirstEchelon1_j_{j}_t_{t}")
 for j in DUS:
     for t in T:
-        m.addConstr(gp.quicksum(R_ij_t[l, j, t] for l in DUS) + gp.quicksum(R_ij_t[j, l, t] for l in DUS) == 0, name=f"FirstEchelon1_j_{j}_t_{t}")
+        m.addConstr(gp.quicksum(R_ij_t[l, j, t] for l in DUS) - gp.quicksum(R_ij_t[j, l, t] for l in DUS) == 0, name=f"FirstEchelon1_j_{j}_t_{t}")
 
 
 for t in T:
@@ -152,10 +155,13 @@ for c in C:
             m.addConstr(M * (2 - Y_c_t[c, t] - Q_c_s[c, s]) + gp.quicksum(R_ij_t[s, k, t] for k in DUS) >= 1, name=f"FirstEchelon6_c_{c}_s_{s}_t_{t}")
 
 
+# for i in DUS_1:
+#     for j in DUS_2:
+#         for t in T:
+#             m.addConstr(R_ij_t[i, j, t] == 0, name=f"FirstEchelon7_i_{i}_j_{j}_t_{t}")
 for i in DUS_1:
     for j in DUS_2:
-        for t in T:
-            m.addConstr(R_ij_t[i, j, t] == 0, name=f"FirstEchelon7_i_{i}_j_{j}_t_{t}")
+        m.addConstr(gp.quicksum(R_ij_t[i, j, t] for t in T) == 0, name=f"FirstEchelon7_i_{i}_j_{j}")
 
 
 for c in C1:
@@ -167,9 +173,12 @@ for c in C2:
 
 # Constraints in second echelon
 
+# for j in SUCUO:
+#     for v in V:
+#         m.addConstr(gp.quicksum(X_ij_v[l, j, v] for l in SUCUO) + gp.quicksum(X_ij_v[j, l, v] for l in SUCUO) == 0, name=f"SecondEchelon1_j_{j}_v_{v}")
 for j in SUCUO:
     for v in V:
-        m.addConstr(gp.quicksum(X_ij_v[l, j, v] for l in SUCUO) + gp.quicksum(X_ij_v[j, l, v] for l in SUCUO) == 0, name=f"SecondEchelon1_j_{j}_v_{v}")
+        m.addConstr(gp.quicksum(X_ij_v[l, j, v] for l in SUCUO) - gp.quicksum(X_ij_v[j, l, v] for l in SUCUO) == 0, name=f"SecondEchelon1_j_{j}_v_{v}")
 
 
 for v in V:
@@ -303,7 +312,23 @@ m.optimize()
 # Output the results
 if m.status == GRB.OPTIMAL:
     print("Optimal solution found.")
-    for var in m.getVars():
-        print(f"{var.varName}: {var.x}")
+    # for var in m.getVars():
+    #     print(f"{var.varName}: {var.x}")
 else:
     print(f"Optimization ended with status {m.status}.")
+
+
+# # do IIS if the model is infeasible
+# if m.Status == GRB.INFEASIBLE:
+#     m.computeIIS()
+
+# m.write('iismodel.ilp')
+
+# # Print out the IIS constraints and variables
+# print('\nThe following constraints and variables are in the IIS:')
+# for c in m.getConstrs():
+#     if c.IISConstr: print(f'\t{c.constrname}: {m.getRow(c)} {c.Sense} {c.RHS}')
+
+# for v in m.getVars():
+#     if v.IISLB: print(f'\t{v.varname} ≥ {v.LB}')
+#     if v.IISUB: print(f'\t{v.varname} ≤ {v.UB}')
