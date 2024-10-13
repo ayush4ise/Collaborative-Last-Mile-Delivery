@@ -103,10 +103,10 @@ K_sv_o = m.addVars(S, V, O, vtype=gp.GRB.BINARY, name="K_sv_o")
 H_ij_v = m.addVars(SUCUO, SUCUO, V, vtype=gp.GRB.INTEGER, name="H_ij_v")
 
 # Variables to avoid subtour in first echelon
-G_i_t = m.addVars(S, T, vtype=gp.GRB.INTEGER, name="G_i_t")
+G_i_t = m.addVars(S, T, vtype=gp.GRB.CONTINUOUS, name="G_i_t")
 
 # Variables to avoid subtour in second echelon
-G_i_v = m.addVars(CUO, V, vtype=gp.GRB.INTEGER, name="G_i_v")
+G_i_v = m.addVars(CUO, V, vtype=gp.GRB.CONTINUOUS, name="G_i_v")
 
 
 
