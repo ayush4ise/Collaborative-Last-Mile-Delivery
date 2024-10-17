@@ -25,3 +25,14 @@ R_ij_t - R_ji_t = 0
 Question-
 
 - The value of M effects the optimal solutions. Why?
+
+
+Omitted Variables from Original Problem Formulation: (Which the paper takes inspiration from)
+
+- service time of satellite
+
+- time window for each customer [az,bz]
+
+- service time at customer location sz
+
+- synchronization time between first echelon vehicle reaching the satellite and the second echelon vehicle leaving the satellite
