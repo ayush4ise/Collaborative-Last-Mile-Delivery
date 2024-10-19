@@ -198,19 +198,3 @@ if m.status == GRB.OPTIMAL:
 
 else:
     print(f"Optimization ended with status {m.status}.")
-
-
-# # do IIS if the model is infeasible
-# if m.Status == GRB.INFEASIBLE:
-#     m.computeIIS()
-
-# m.write('iismodel.ilp')
-
-# # Print out the IIS constraints and variables
-# print('\nThe following constraints and variables are in the IIS:')
-# for c in m.getConstrs():
-#     if c.IISConstr: print(f'\t{c.constrname}: {m.getRow(c)} {c.Sense} {c.RHS}')
-
-# for v in m.getVars():
-#     if v.IISLB: print(f'\t{v.varname} ≥ {v.LB}')
-#     if v.IISUB: print(f'\t{v.varname} ≤ {v.UB}')
