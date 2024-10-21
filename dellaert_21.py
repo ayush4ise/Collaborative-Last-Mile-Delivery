@@ -194,7 +194,7 @@ if m.status == GRB.OPTIMAL:
         if v.x>0:
             varInfo[v.varName] = v.x
 
-    pd.DataFrame(varInfo, index = ['value']).T.to_excel('solution.xlsx')
+    pd.DataFrame(varInfo, index = ['value']).T.to_excel('solution_SA_d21.xlsx')
 
 else:
     print(f"Optimization ended with status {m.status}.")

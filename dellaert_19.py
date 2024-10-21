@@ -77,7 +77,7 @@ M = 10000 # A sufficiently large constant
 R_ij_t = m.addVars(DUS, DUS, T, vtype=gp.GRB.BINARY, name="R_ij_t") 
 
 # 1 if second echelon vehicle ‘v’ is moving from node ‘i’ to ‘j’, 0 otherwise
-Q_ij_v = m.addVars(SUC, SUC, V, vtype=gp.GRB.BINARY, name="Q_ij_v")
+X_ij_v = m.addVars(SUC, SUC, V, vtype=gp.GRB.BINARY, name="X_ij_v")
 
 # 1 if first echelon vehicle ‘t’ is being used, 0 otherwise
 U_t = m.addVars(T, vtype=gp.GRB.BINARY, name="U_t")
@@ -103,7 +103,7 @@ x_ij_t = m.addVars(D, S, T, vtype=gp.GRB.INTEGER, name="x_ij_t")
 # Objective Function
 m.setObjective(
     gp.quicksum(C_ij[i-1, j-1] * R_ij_t[i, j, t] for i in DUS for j in DUS for t in T) +
-    gp.quicksum(C_ij[i-1, j-1] * Q_ij_v[i, j, v] for i in SUC for j in SUC for v in V) +
+    gp.quicksum(C_ij[i-1, j-1] * X_ij_v[i, j, v] for i in SUC for j in SUC for v in V) +
     gp.quicksum(F_t[t] * U_t[t] for t in T) + 
     gp.quicksum(F_v[v] * U_v[v] for v in V),
     sense=gp.GRB.MINIMIZE
@@ -149,7 +149,7 @@ for t in T:
 
 # dellaert_19
 for i in C:
-    m.addConstr(gp.quicksum(gp.quicksum(Q_ij_v[i, j, v] for j in SUC) for v in V) == 1, name=f"D19_4_i_{i}")
+    m.addConstr(gp.quicksum(gp.quicksum(X_ij_v[i, j, v] for j in SUC) for v in V) == 1, name=f"D19_4_i_{i}")
 
 
 
@@ -157,24 +157,24 @@ for i in C:
 
 # for j in SUCUO:
 #     for v in V:
-#         m.addConstr(gp.quicksum(Q_ij_v[l, j, v] for l in SUCUO) + gp.quicksum(Q_ij_v[j, l, v] for l in SUCUO) == 0, name=f"SecondEchelon1_j_{j}_v_{v}")
+#         m.addConstr(gp.quicksum(X_ij_v[l, j, v] for l in SUCUO) + gp.quicksum(X_ij_v[j, l, v] for l in SUCUO) == 0, name=f"SecondEchelon1_j_{j}_v_{v}")
 # dellaert_19 - j - S
 for j in S:
     for v in V:
-        m.addConstr(gp.quicksum(Q_ij_v[l, j, v] for l in SUC) - gp.quicksum(Q_ij_v[j, l, v] for l in SUC) == 0, name=f"SecondEchelon1_j_{j}_v_{v}")
+        m.addConstr(gp.quicksum(X_ij_v[l, j, v] for l in SUC) - gp.quicksum(X_ij_v[j, l, v] for l in SUC) == 0, name=f"SecondEchelon1_j_{j}_v_{v}")
 
 
 # changed <= to ==
 # dellaert_19 - <=1, i in SUC
 for v in V:
-    m.addConstr(gp.quicksum((gp.quicksum(Q_ij_v[i, j, v] for j in S)) for i in SUC) <=1, name=f"SecondEchelon2_v_{v}")
+    m.addConstr(gp.quicksum((gp.quicksum(X_ij_v[i, j, v] for j in S)) for i in SUC) <=1, name=f"SecondEchelon2_v_{v}")
 
 
 # All dellaert_19 from here on
 for i in C:
     for j in S:
         for v in V:
-            m.addConstr(gp.quicksum(Q_ij_v[i, k, v] for k in SUC) + gp.quicksum(Q_ij_v[j, k, v] for k in SUC) - w_i_j[i, j] <=1, name=f"D19_5_i_{i}_j_{j}_v_{v}")
+            m.addConstr(gp.quicksum(X_ij_v[i, k, v] for k in SUC) + gp.quicksum(X_ij_v[j, k, v] for k in SUC) - w_i_j[i, j] <=1, name=f"D19_5_i_{i}_j_{j}_v_{v}")
 
 
 for i in C:
@@ -182,7 +182,7 @@ for i in C:
 
 
 for v in V:
-    m.addConstr(gp.quicksum((d_c[i] * gp.quicksum(Q_ij_v[i, j, v] for j in SUC)) for i in C) <= K2 * U_v[v], name=f"D19_7_v_{v}")
+    m.addConstr(gp.quicksum((d_c[i] * gp.quicksum(X_ij_v[i, j, v] for j in SUC)) for i in C) <= K2 * U_v[v], name=f"D19_7_v_{v}")
 
 
 for k in S:
@@ -203,7 +203,7 @@ if m.status == GRB.OPTIMAL:
         if v.x>0:
             varInfo[v.varName] = v.x
 
-    pd.DataFrame(varInfo, index = ['value']).T.to_excel('solution.xlsx')
+    pd.DataFrame(varInfo, index = ['value']).T.to_excel('solution_NC_d19.xlsx')
 
 else:
     print(f"Optimization ended with status {m.status}.")
