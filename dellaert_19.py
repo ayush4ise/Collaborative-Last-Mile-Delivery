@@ -23,7 +23,7 @@ m = gp.Model("smaller_instances")
 
 # Sets
 # Given in Table 3
-L = [1, 2] # list of lsps
+# L = [1, 2] # list of lsps
 D = [1, 2] # list of depots # P
 S = [3, 4, 5, 6] # list of satellites
 C = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18] # list of customers # Z
@@ -40,14 +40,6 @@ SUC = S + C # list of satellites, customers
 ns = len(S) # number of satellites
 nc = len(C) # number of customers
 
-DUS_1 = [1, 3, 5] # list of depots and satellites for lsp 1
-DUS_2 = [2, 4, 6] # list of depots and satellites for lsp 2
-
-C1 = [8, 10, 12, 14, 16, 18] # list of customers for lsp 1
-C2 = [7, 9, 11, 13, 15, 17] # list of customers for lsp 2
-
-S1 = [3, 5] # list of satellites for lsp 1
-S2 = [4, 6] # list of satellites for lsp 2
 
 # Parameters
 # Given in Table 4
@@ -187,6 +179,12 @@ for v in V:
 
 for k in S:
     m.addConstr(gp.quicksum(gp.quicksum(x_ij_t[i, k, t] for t in T) for i in D) - gp.quicksum(d_c[j] * w_i_j[j, k] for j in C) == 0, name=f"D19_8_k_{k}")
+
+
+for i in D:
+    for j in S:
+        for t in T:
+            m.addConstr(x_ij_t[i, j, t] >= 0, name=f"D19_9_i_{i}_j_{j}_t_{t}")
 
 
 # Optimize model
