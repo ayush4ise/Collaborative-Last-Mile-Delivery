@@ -38,7 +38,7 @@ SUCUO = S + C + O # list of satellites, customers, and collaboration points
 CUO = C + O # list of customers, and collaboration points
 SUC = S + C # list of satellites, customers
 ns = len(S) # number of satellites
-nc = len(C) # number of customers
+nc = len(C) + 2# number of customers
 
 DUS_1 = [1, 3, 5] # list of depots and satellites for lsp 1
 DUS_2 = [2, 4, 6] # list of depots and satellites for lsp 2
@@ -319,6 +319,10 @@ if m.status == GRB.OPTIMAL:
     for v in m.getVars():
         if v.x>0:
             varInfo[v.varName] = v.x
+
+    for c in m.getConstrs():
+        if c.Slack >= 1e-6:
+            print('Constraint %s is not active at solution point' % (c.ConstrName))
 
     pd.DataFrame(varInfo, index = ['value']).T.to_excel('solution.xlsx')
 

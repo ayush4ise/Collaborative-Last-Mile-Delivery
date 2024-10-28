@@ -1,0 +1,125 @@
+Constraint SecondEchelon7_v_3 is not active at solution point
+Constraint SecondEchelon7_v_4 is not active at solution point
+Constraint SecondEchelon7_v_5 is not active at solution point
+Constraint SecondEchelon7_v_6 is not active at solution point
+
+Constraint SecondEchelon19_o_19 is not active at solution point
+Constraint SecondEchelon19_o_20 is not active at solution point
+
+Constraint SecondEchelon23_i_7_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_7_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_7_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_7_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_7_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_7_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_7_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_7_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_8_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_8_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_8_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_8_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_8_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_8_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_9_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_9_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_9_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_9_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_9_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_9_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_9_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_9_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_10_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_10_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_10_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_10_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_10_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_10_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_10_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_10_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_11_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_11_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_11_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_11_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_11_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_12_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_12_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_12_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_12_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_12_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_12_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_12_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_12_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_13_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_13_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_13_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_13_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_13_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_13_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_13_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_13_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_14_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_14_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_14_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_14_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_14_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_14_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_14_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_14_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_15_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_15_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_15_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_15_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_15_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_15_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_16_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_16_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_16_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_16_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_16_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_16_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_16_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_16_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_17_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_17_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_17_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_17_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_17_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_17_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_17_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_17_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_18_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_18_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_18_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_18_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_18_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_18_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_18_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_18_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_19_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_19_j_19_v_4 is not active at solution point
+Constraint SecondEchelon23_i_19_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_19_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_19_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_19_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_19_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_19_j_20_v_6 is not active at solution point
+
+Constraint SecondEchelon23_i_20_j_19_v_3 is not active at solution point
+Constraint SecondEchelon23_i_20_j_19_v_5 is not active at solution point
+Constraint SecondEchelon23_i_20_j_19_v_6 is not active at solution point
+Constraint SecondEchelon23_i_20_j_20_v_3 is not active at solution point
+Constraint SecondEchelon23_i_20_j_20_v_4 is not active at solution point
+Constraint SecondEchelon23_i_20_j_20_v_5 is not active at solution point
+Constraint SecondEchelon23_i_20_j_20_v_6 is not active at solution point
