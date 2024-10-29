@@ -21,6 +21,8 @@ R_ij_t - R_ji_t = 0
 - Constraint 10 - same as constraint 2
 
 
+- Constraint 31 - nc should be number of customers + collaboration points instead of just number of customers
+
 
 Question-
 

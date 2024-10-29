@@ -38,7 +38,7 @@ SUCUO = S + C + O # list of satellites, customers, and collaboration points
 CUO = C + O # list of customers, and collaboration points
 SUC = S + C # list of satellites, customers
 ns = len(S) # number of satellites
-nc = len(C) + 2# number of customers
+nc = len(C) + 2 # number of customers + collaboration points
 
 DUS_1 = [1, 3, 5] # list of depots and satellites for lsp 1
 DUS_2 = [2, 4, 6] # list of depots and satellites for lsp 2
@@ -274,10 +274,10 @@ for o in O:
                 m.addConstr(M * (2 - gp.quicksum(X_ij_v[i, o, v] for i in SUC) - gp.quicksum(X_ij_v[i, o, k] for i in SUC)) + gp.quicksum(H_ij_v[i, o, v] for i in SUC) >= gp.quicksum(H_ij_v[o, j, k] for j in SUC), name=f"SecondEchelon17_o_{o}_v_{v}_k_{k}")
 
 
-for o in O:
-    for v in V:
-        for k in V:
-            if v!=k:
+# for o in O:
+#     for v in V:
+#         for k in V:
+#             if v!=k:
                 m.addConstr(M * (2 - gp.quicksum(X_ij_v[i, o, v] for i in SUC) - gp.quicksum(X_ij_v[i, o, k] for i in SUC)) + gp.quicksum(H_ij_v[i, o, k] for i in SUC) >= gp.quicksum(H_ij_v[o, j, v] for j in SUC), name=f"SecondEchelon18_o_{o}_v_{v}_k_{k}")    
 
 
@@ -321,7 +321,7 @@ if m.status == GRB.OPTIMAL:
             varInfo[v.varName] = v.x
 
     for c in m.getConstrs():
-        if c.Slack >= 1e-6:
+        if c.Slack > 1e-6:
             print('Constraint %s is not active at solution point' % (c.ConstrName))
 
     pd.DataFrame(varInfo, index = ['value']).T.to_excel('solution.xlsx')
