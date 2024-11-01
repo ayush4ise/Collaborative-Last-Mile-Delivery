@@ -253,8 +253,8 @@ for v in V:
                         m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(K_sv_o[e, f, o] for f in V) >= 1, name=f"SecondEchelon13_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
 
 
-for s in S:
-    m.addConstr(gp.quicksum(Q_c_s[c, s] * d_c[c] for c in C) == gp.quicksum((gp.quicksum(H_ij_v[s, j, v] for j in CUO)) for v in V), name=f"SecondEchelon14_s_{s}")
+# for s in S:
+#     m.addConstr(gp.quicksum(Q_c_s[c, s] * d_c[c] for c in C) == gp.quicksum((gp.quicksum(H_ij_v[s, j, v] for j in CUO)) for v in V), name=f"SecondEchelon14_s_{s}")
 
 
 for c in C:
@@ -289,8 +289,9 @@ for v in V:
     m.addConstr(gp.quicksum((gp.quicksum (H_ij_v[i, j, v] for j in S)) for i in CUO) == 0, name=f"SecondEchelon20_v_{v}")
 
 
-for s in S:
-    m.addConstr(gp.quicksum(Q_c_s[c, s] * d_c[c] for c in C) <= A_s[s], name=f"SecondEchelon21_s_{s}")
+# for s in S:
+#     m.addConstr(gp.quicksum(Q_c_s[c, s] * d_c[c] for c in C) <= A_s[s], name=f"SecondEchelon21_s_{s}")
+
 
 
 for i in S:
