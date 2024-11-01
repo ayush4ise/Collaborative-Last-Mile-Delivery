@@ -282,7 +282,7 @@ for o in O:
 
 
 for o in O:
-    m.addConstr(gp.quicksum((gp.quicksum(X_ij_v[i, o, v] for v in V)) for i in SUCUO) <= 2, name=f"SecondEchelon19_o_{o}")
+    m.addConstr(gp.quicksum((gp.quicksum(X_ij_v[i, o, v] for v in V)) for i in SUC) <= 2, name=f"SecondEchelon19_o_{o}")
 
 
 for v in V:

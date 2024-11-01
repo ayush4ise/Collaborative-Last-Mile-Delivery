@@ -24,9 +24,25 @@ R_ij_t - R_ji_t = 0
 - Constraint 31 - nc should be number of customers + collaboration points instead of just number of customers
 
 
+- Constraint 27 - SUC instead of SUCUO (X_ij_v <= 2)
+
+
 Question-
 
 - The value of M effects the optimal solutions. Why?
+
+- Constraint SecondEchelon21 - sum over C Q_c_s * dc <= A_s (but if Q_c_s represents the updated customers after the exchange, then it doesn't work, so maybe it's just the original customers)
+
+- Constraint SecondEchelon14 - same issue as above
+
+- Constraint SecondEchelon4 - gp.quicksum(X_ij_v[c, k, v] for k in SUCUO) == Y_c_v[c, v], but X_ij_v stores the path, hence has exchanged customers, which ultimately points that Y_c_v represents updated customers after the exchange 
+
+- Constraint SecondEchelon9 - wants to have updated Q_c_s
+
+
+TO SOLVE THE Q_c_s ISSUE-
+1. We can have a separate variable to store the updated customers after the exchange
+2. We can remove the capacity constraints restricting the number of customers in the vehicle (SecondEchelon21 and SecondEchelon14)
 
 
 Omitted Variables from Original Problem Formulation: (Which the paper takes inspiration from)
