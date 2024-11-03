@@ -65,7 +65,7 @@ p_c = {7:2, 8:1, 9:2, 10:1, 11:2, 12:1, 13:2, 14:1, 15:2, 16:1, 17:2, 18:1} # DC
 
 
 # Assumption
-M = 10000 # A sufficiently large constant
+M = 100000 # A sufficiently large constant
 
 
 
@@ -186,7 +186,7 @@ for v in V:
 
 
 for c in C:
-    m.addConstr(gp.quicksum(Y_c_v[c, v] for v in V) == 1, name=f"SecondEchelon3_c_{c}")
+    m.addConstr(gp.quicksum(Y_c_v[c, v] for v in V) >= 1, name=f"SecondEchelon3_c_{c}")
 
 
 for c in C:
@@ -233,7 +233,7 @@ for v in V:
             for s in S:
                 for e in S:
                     if s!=e:
-                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C1) + X_ij_v[o, c, v] >= 2, name=f"SecondEchelon11_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
+                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C2+O) + X_ij_v[o, c, v] >= 2, name=f"SecondEchelon11_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
 
 for v in V:
     for o in O:
@@ -241,7 +241,7 @@ for v in V:
             for s in S:
                 for e in S:
                     if s!=e:
-                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C2) + X_ij_v[o, c, v] >= 2, name=f"SecondEchelon12_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
+                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C1+O) + X_ij_v[o, c, v] >= 2, name=f"SecondEchelon12_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
 
 
 for v in V:
@@ -250,11 +250,11 @@ for v in V:
             for s in S:
                 for e in S:
                     if s!=e:
-                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(K_sv_o[e, f, o] for f in V) >= 1, name=f"SecondEchelon13_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
+                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(K_sv_o[s, f, o] for f in V) >= 1, name=f"SecondEchelon13_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
 
 
-# for s in S:
-#     m.addConstr(gp.quicksum(Q_c_s[c, s] * d_c[c] for c in C) == gp.quicksum((gp.quicksum(H_ij_v[s, j, v] for j in CUO)) for v in V), name=f"SecondEchelon14_s_{s}")
+for s in S:
+    m.addConstr(gp.quicksum(Q_c_s[c, s] * d_c[c] for c in C) == gp.quicksum((gp.quicksum(H_ij_v[s, j, v] for j in CUO)) for v in V), name=f"SecondEchelon14_s_{s}")
 
 
 for c in C:
@@ -263,8 +263,9 @@ for c in C:
 
 for i in SUCUO:
     for j in SUCUO:
-        for v in V:
-            m.addConstr(H_ij_v[i, j, v] <= K2 * X_ij_v[i, j, v], name=f"SecondEchelon16_i_{i}_j_{j}_v_{v}")
+        if i!=j:
+            for v in V:
+                m.addConstr(H_ij_v[i, j, v] <= K2 * X_ij_v[i, j, v], name=f"SecondEchelon16_i_{i}_j_{j}_v_{v}")
 
 
 for o in O:
@@ -289,8 +290,8 @@ for v in V:
     m.addConstr(gp.quicksum((gp.quicksum (H_ij_v[i, j, v] for j in S)) for i in CUO) == 0, name=f"SecondEchelon20_v_{v}")
 
 
-# for s in S:
-#     m.addConstr(gp.quicksum(Q_c_s[c, s] * d_c[c] for c in C) <= A_s[s], name=f"SecondEchelon21_s_{s}")
+for s in S:
+    m.addConstr(gp.quicksum(Q_c_s[c, s] * d_c[c] for c in C) <= A_s[s], name=f"SecondEchelon21_s_{s}")
 
 
 
@@ -321,9 +322,9 @@ if m.status == GRB.OPTIMAL:
         if v.x>0:
             varInfo[v.varName] = v.x
 
-    for c in m.getConstrs():
-        if c.Slack > 1e-6:
-            print('Constraint %s is not active at solution point' % (c.ConstrName))
+    # for c in m.getConstrs():
+    #     if c.Slack > 1e-6:
+    #         print('Constraint %s is not active at solution point' % (c.ConstrName))
 
     pd.DataFrame(varInfo, index = ['value']).T.to_excel('solution.xlsx')
 
