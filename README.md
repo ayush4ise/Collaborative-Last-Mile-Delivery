@@ -53,6 +53,7 @@ SE9 uses Big M to ensure 3 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, s], meaning fo
 
 SE10-SE13 used Big M to ensure 3 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e], meaning that for a given customer, satellite, vehicle (c, s, v), customer c is assigned to satellite s (assumed to be after exchange), vehicle v is assigned to customer c (assumed to be after exchange), and vehicle v is assigned to satellite e (e not equal to s, meaning vehicle assigned to some other satellite).
 
+EVEN IF WE HAVE Y_c_v as updated customers after the exchange, we still need a vehicle from the original satellite to carry the customers' goods to the collaboraion point for the other satellite's vehicle to pick up.
 
 
 Omitted Variables from Original Problem Formulation: (Which the paper takes inspiration from)
