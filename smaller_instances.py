@@ -4,7 +4,7 @@ from gurobipy import GRB
 import pandas as pd
 import numpy as np
 
-data = pd.read_excel("Data\Instances\Small_Instances.xlsx", sheet_name='A5', index_col=0)
+data = pd.read_excel("Data\Instances\Small_Instances.xlsx", sheet_name='A1', index_col=0)
 data = data[['X', 'Y']]
 
 def EuclideanDistance(x1, y1, x2, y2):
