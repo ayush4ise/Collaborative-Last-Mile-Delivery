@@ -39,6 +39,8 @@ Question-
 
 Commit "current code does better for A3" has better results for A3, but not the same as the paper. Kindly analyze the cause later. 
 
+Commit "possible successful implementation" has same results for A1, A2, better fro A3, A4 and slightly bad for A5.
+
 
 
 Omitted Variables from Original Problem Formulation: (Which the paper takes inspiration from)
