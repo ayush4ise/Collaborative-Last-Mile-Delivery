@@ -35,6 +35,11 @@ Question-
 - SE3 - more than 1 vehicles can be assigned in the case of exchanged customers
 
 
+## FINDINGS
+
+Commit "current code does better for A3" has better results for A3, but not the same as the paper. Kindly analyze the cause later. 
+
+
 
 Omitted Variables from Original Problem Formulation: (Which the paper takes inspiration from)
 

@@ -4,7 +4,7 @@ from gurobipy import GRB
 import pandas as pd
 import numpy as np
 
-data = pd.read_excel("Data\Instances\Small_Instances.xlsx", sheet_name='A1', index_col=0)
+data = pd.read_excel("Data\Instances\Small_Instances.xlsx", sheet_name='A5', index_col=0)
 data = data[['X', 'Y']]
 
 def EuclideanDistance(x1, y1, x2, y2):
@@ -233,7 +233,7 @@ for v in V:
             for s in S:
                 for e in S:
                     if s!=e:
-                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C2+O)  >= 1, name=f"SecondEchelon11_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
+                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C1+O)  >= 1, name=f"SecondEchelon11_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
 
 for v in V:
     for o in O:
@@ -241,7 +241,7 @@ for v in V:
             for s in S:
                 for e in S:
                     if s!=e:
-                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C1+O)   >= 1, name=f"SecondEchelon12_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
+                        m.addConstr(M * (4 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, e] - K_sv_o[e, v, o]) + gp.quicksum(X_ij_v[f, c, v] for f in C2+O)   >= 1, name=f"SecondEchelon12_v_{v}_o_{o}_c_{c}_s_{s}_e_{e}")
 
 
 for v in V:
