@@ -4,7 +4,11 @@ from gurobipy import GRB
 import pandas as pd
 import numpy as np
 
-data = pd.read_excel("Data\Instances\Small_Instances.xlsx", sheet_name='A1', index_col=0)
+from plotting import *
+
+instance = 'A5'
+
+data = pd.read_excel("Data\Instances\Small_Instances.xlsx", sheet_name=instance, index_col=0)
 data = data[['X', 'Y']]
 
 def EuclideanDistance(x1, y1, x2, y2):
@@ -326,7 +330,9 @@ if m.status == GRB.OPTIMAL:
     #     if c.Slack > 1e-6:
     #         print('Constraint %s is not active at solution point' % (c.ConstrName))
 
-    pd.DataFrame(varInfo, index = ['value']).T.to_excel('solution.xlsx')
+    solution_variables = pd.DataFrame(varInfo, index = ['value']).T
+    solution_variables.to_excel(f'solution({instance}) - {m.ObjVal:0.3f}.xlsx')
+    route_plot(data, solution_variables, instance)
 
 else:
     print(f"Optimization ended with status {m.status}.")
