@@ -217,10 +217,10 @@ for v in V:
             m.addConstr(M * (1 - K_sv_o[s, v, o]) + gp.quicksum(X_ij_v[s, j, v] for j in CUO) + gp.quicksum(X_ij_v[i, o, v] for i in SUC) >= 2, name=f"SecondEchelon8_v_{v}_s_{s}_o_{o}")
 
 
-for v in V:
-    for s in S:
-        for c in C:
-            m.addConstr(M * (3 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, s]) + gp.quicksum(X_ij_v[i, c, v] for i in SUC) >= 1, name=f"SecondEchelon9_v_{v}_s_{s}_c_{c}")
+# for v in V:
+#     for s in S:
+#         for c in C:
+#             m.addConstr(M * (3 - Q_c_s[c, s] - Y_c_v[c, v] - B_v_s[v, s]) + gp.quicksum(X_ij_v[i, c, v] for i in SUC) >= 1, name=f"SecondEchelon9_v_{v}_s_{s}_c_{c}")
 
 
 for v in V:
