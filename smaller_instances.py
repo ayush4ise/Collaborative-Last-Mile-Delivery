@@ -308,7 +308,7 @@ for i in S:
 for i in CUO:
     for j in CUO:
         for v in V:
-            m.addConstr(G_i_v[i, v] - G_i_v[j, v] + nc * X_ij_v[i, j, v] <= nc - 1, name=f"SecondEchelon23_i_{i}_j_{j}_v_{v}")
+            m.addConstr(G_i_v[i, v] - G_i_v[j, v] + (nc+2) * X_ij_v[i, j, v] <= (nc+2) - 1, name=f"SecondEchelon23_i_{i}_j_{j}_v_{v}")
 
 
 
