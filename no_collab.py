@@ -6,7 +6,7 @@ import numpy as np
 
 from plotting import *
 
-instance = 'A1'
+instance = 'A5'
 
 data = pd.read_excel("Data\Instances\Small_Instances.xlsx", sheet_name=instance, index_col=0)
 data = data[['X', 'Y']]
@@ -329,7 +329,7 @@ if m.status == GRB.OPTIMAL:
     #         print('Constraint %s is not active at solution point' % (c.ConstrName))
 
     solution_variables = pd.DataFrame(varInfo, index = ['value']).T
-    # solution_variables.to_excel(f'solution({instance}) - {m.ObjVal:0.3f}.xlsx')
+    solution_variables.to_excel(f'nocollab_solution({instance}) - {m.ObjVal:0.3f}.xlsx')
     route_plot(data, solution_variables, instance)
 
 else:
