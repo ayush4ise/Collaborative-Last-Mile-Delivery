@@ -78,5 +78,6 @@ def route_plot(data, solution_variables, instance):
     ]
     # add legend mentioning that squares are depots, triangles are satellites, circles are customers, and diamonds are collaboration points, arrows are routes, and colours are according to LSPs
     plt.legend(handles=legend_entries)
+    plt.title(f'Route Plot for {instance}')
     plt.savefig(f'route_plot({instance}).png')
     plt.close()
